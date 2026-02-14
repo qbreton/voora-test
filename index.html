@@ -1048,7 +1048,7 @@
         </div>
     </section>
 
-    <iframe src="https://voora.vercel.app/s/f0c3f86d-1cfb-4e07-8359-460454f7904e" width="100%" height="600" frameborder="0"></iframe>
+    <div id="success-loop-survey"></div>
 
     <!-- Tour Section -->
     <section id="tour" class="section tour">
@@ -1291,7 +1291,13 @@
         organizationId: "da8afe03-ef6d-4c60-996a-d7d0db309a55"
       })
 
-      SuccessLoop.showSurvey("f0c3f86d-1cfb-4e07-8359-460454f7904e")
+      SuccessLoop.identify("user_123", {
+        email: "user@example.com",
+        name: "John Doe",
+        plan: "pro"
+      })
+
+      SuccessLoop.showSurvey("f0c3f86d-1cfb-4e07-8359-460454f7904e", '#success-loop-survey')
     </script>
 </body>
 </html>
