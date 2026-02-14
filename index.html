@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="La Fourchette d'Or - Restaurant gastronomique au cœur de Paris. Cuisine française raffinée, ambiance chaleureuse et service exceptionnel.">
+    <meta name="keywords" content="restaurant, gastronomie, cuisine française, paris, réservation, menu">
+    <meta name="author" content="La Fourchette d'Or">
+
+    <title>La Fourchette d'Or - Restaurant Gastronomique Paris</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="restaurant">
+    <meta property="og:title" content="La Fourchette d'Or - Restaurant Gastronomique">
+    <meta property="og:description" content="Découvrez une expérience culinaire unique au cœur de Paris">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍴</text></svg>">
+
+    <style>
+        :root {
+            --primary: #d4af37;
+            --primary-dark: #b8941f;
+            --secondary: #8b4513;
+            --accent: #ff6b6b;
+            --text-dark: #2c1810;
+            --text-light: #6b5d53;
+            --bg-light: #faf8f5;
+            --bg-cream: #f5f1e8;
+            --white: #ffffff;
+            --success: #48bb78;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', 'Georgia', serif;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-dark);
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            padding: 0.8rem 1.8rem;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--text-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            height: 90vh;
+            background: linear-gradient(rgba(44, 24, 16, 0.5), rgba(44, 24, 16, 0.5)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%238b4513" width="1200" height="800"/><text x="50%" y="50%" font-size="100" text-anchor="middle" fill="%23d4af37" opacity="0.3">🍽️</text></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(transparent, var(--white));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero .btn-primary {
+            background: var(--primary);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .hero .btn-secondary {
+            border-color: white;
+            color: white;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .hero .btn-secondary:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        /* About Section */
+        .section {
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-subtitle {
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .about {
+            background: var(--bg-cream);
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .about-image {
+            height: 500px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image::before {
+            content: '🍽️';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Menu Section */
+        .menu {
+            background: white;
+        }
+
+        .menu-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .menu-category {
+            padding: 0.8rem 2rem;
+            background: var(--bg-cream);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .menu-category:hover,
+        .menu-category.active {
+            background: var(--primary);
+            color: var(--text-dark);
+            transform: translateY(-2px);
+        }
+
+        .menu-items {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 2rem;
+            background: var(--bg-cream);
+            border-radius: 15px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item-content {
+            flex: 1;
+        }
+
+        .menu-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .menu-item-description {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .menu-item-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-left: 2rem;
+        }
+
+        /* Specialties */
+        .specialties {
+            background: var(--bg-cream);
+        }
+
+        .specialties-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .specialty-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .specialty-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .specialty-content {
+            padding: 2rem;
+        }
+
+        .specialty-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .specialty-content p {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Reservation Section */
+        .reservation {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+        }
+
+        .reservation-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .reservation h2 {
+            color: white;
+        }
+
+        .reservation p {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .form-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Tour Section */
+        .tour {
+            background: var(--bg-light);
+        }
+
+        .tour-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 2px dashed var(--primary);
+        }
+
+        .tour-placeholder {
+            background: var(--bg-cream);
+            padding: 4rem;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: white;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-cream);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+            color: var(--text-dark);
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Gallery */
+        .gallery {
+            background: var(--bg-cream);
+        }
+
+        .gallery-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            height: 300px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Info Section */
+        .info {
+            background: var(--text-dark);
+            color: white;
+        }
+
+        .info-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .info-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .info-box p,
+        .info-box a {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .info-box a {
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .info-box a:hover {
+            color: var(--primary);
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                order: -1;
+                height: 350px;
+            }
+
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .info-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-categories {
+                gap: 1rem;
+            }
+
+            .menu-category {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .menu-item {
+                flex-direction: column;
+            }
+
+            .menu-item-price {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                🍴 <span class="logo-text">La Fourchette d'Or</span>
+            </div>
+            <div class="nav-links">
+                <a href="#about">À propos</a>
+                <a href="#menu">Menu</a>
+                <a href="#specialties">Spécialités</a>
+                <a href="#testimonials">Avis</a>
+                <a href="#reservation" class="btn-primary">Réserver</a>
+            </div>
+            <button class="mobile-menu-toggle">☰</button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content fade-in-up">
+            <p class="hero-subtitle">Bienvenue au</p>
+            <h1>La Fourchette d'Or</h1>
+            <p>
+                Une expérience gastronomique d'exception au cœur de Paris.<br>
+                Cuisine française raffinée, produits locaux et savoir-faire artisanal.
+            </p>
+            <div class="hero-buttons">
+                <a href="#reservation" class="btn-primary">Réserver une table</a>
+                <a href="#menu" class="btn-secondary">Découvrir le menu</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="about-content">
+            <div class="about-text">
+                <p class="section-subtitle">Notre Histoire</p>
+                <h3>Une passion pour la gastronomie française</h3>
+                <p>
+                    Depuis 1985, La Fourchette d'Or perpétue l'excellence de la cuisine française traditionnelle
+                    tout en apportant une touche de modernité et de créativité à chaque plat.
+                </p>
+                <p>
+                    Notre chef étoilé, Pierre Durand, sélectionne personnellement les meilleurs produits
+                    auprès de producteurs locaux pour vous offrir une expérience culinaire inoubliable.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-box">
+                        <span class="stat-number">38</span>
+                        <span class="stat-label">Années d'excellence</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">2★</span>
+                        <span class="stat-label">Étoiles Michelin</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">15K+</span>
+                        <span class="stat-label">Clients satisfaits</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                👨‍🍳
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="section menu">
+        <div class="section-header">
+            <p class="section-subtitle">Notre Carte</p>
+            <h2>Menu Gastronomique</h2>
+            <p>Des plats raffinés préparés avec passion et savoir-faire</p>
+        </div>
+
+        <div class="menu-container">
+            <div class="menu-categories">
+                <div class="menu-category active">Entrées</div>
+                <div class="menu-category">Plats</div>
+                <div class="menu-category">Desserts</div>
+            </div>
+
+            <div class="menu-items">
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <h4>Foie Gras Maison</h4>
+                        <p class="menu-item-description">
+                            Foie gras de canard mi-cuit, chutney de figues et pain brioché toasté
+                        </p>
+                    </div>
+                    <div class="menu-item-price">28€</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <h4>Carpaccio de Saint-Jacques</h4>
+                        <p class="menu-item-description">
+                            Noix de Saint-Jacques fraîches, émulsion citronnée, caviar et herbes aromatiques
+                        </p>
+                    </div>
+                    <div class="menu-item-price">32€</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <h4>Velouté de Homard</h4>
+                        <p class="menu-item-description">
+                            Velouté onctueux au homard breton, crème fraîche et estragon
+                        </p>
+                    </div>
+                    <div class="menu-item-price">24€</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <h4>Tartare de Bœuf</h4>
+                        <p class="menu-item-description">
+                            Bœuf charolais découpé au couteau, assaisonnement traditionnel et frites maison
+                        </p>
+                    </div>
+                    <div class="menu-item-price">26€</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialties Section -->
+    <section id="specialties" class="section specialties">
+        <div class="section-header">
+            <p class="section-subtitle">Nos Créations</p>
+            <h2>Spécialités du Chef</h2>
+            <p>Les incontournables de La Fourchette d'Or</p>
+        </div>
+
+        <div class="specialties-grid">
+            <div class="specialty-card">
+                <div class="specialty-image">🥩</div>
+                <div class="specialty-content">
+                    <h3>Bœuf Rossini</h3>
+                    <p>
+                        Filet de bœuf poêlé, escalope de foie gras, sauce truffée et légumes de saison.
+                        Notre signature depuis 1985.
+                    </p>
+                </div>
+            </div>
+
+            <div class="specialty-card">
+                <div class="specialty-image">🦞</div>
+                <div class="specialty-content">
+                    <h3>Homard à l'Armoricaine</h3>
+                    <p>
+                        Homard breton fraîchement pêché, sauce armoricaine crémeuse, riz basmati parfumé.
+                        Un voyage en Bretagne.
+                    </p>
+                </div>
+            </div>
+
+            <div class="specialty-card">
+                <div class="specialty-image">🍰</div>
+                <div class="specialty-content">
+                    <h3>Soufflé Grand Marnier</h3>
+                    <p>
+                        Soufflé chaud au Grand Marnier, glace vanille bourbon et zestes d'orange confits.
+                        Préparation 20 minutes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="section reservation">
+        <div class="reservation-container">
+            <p class="section-subtitle" style="color: var(--primary);">Réservation</p>
+            <h2>Réservez votre table</h2>
+            <p style="margin-bottom: 2rem;">
+                Nous vous recommandons de réserver à l'avance pour garantir votre place.<br>
+                Notre équipe vous accueillera avec plaisir.
+            </p>
+
+            <!-- PLACEHOLDER FOR YOUR RESERVATION FORM -->
+            <div class="form-placeholder">
+                📅 Formulaire de réservation à ajouter ici<br>
+                <small style="opacity: 0.8; margin-top: 1rem; display: block;">
+                    Date, heure, nombre de personnes, nom, téléphone, email, allergies/remarques
+                </small>
+            </div>
+            <!-- END PLACEHOLDER -->
+
+            <p style="margin-top: 2rem; font-size: 0.95rem; opacity: 0.9;">
+                📞 Réservation par téléphone : <strong>01 42 33 44 55</strong><br>
+                Ouvert du mardi au samedi, de 12h à 14h30 et de 19h à 22h30
+            </p>
+        </div>
+    </section>
+
+    <iframe src="https://voora.vercel.app/s/f0c3f86d-1cfb-4e07-8359-460454f7904e" width="100%" height="600" frameborder="0"></iframe>
+
+    <!-- Tour Section -->
+    <section id="tour" class="section tour">
+        <div class="section-header">
+            <p class="section-subtitle">Visite Virtuelle</p>
+            <h2>Découvrez notre établissement</h2>
+            <p>Parcourez notre restaurant avant votre visite</p>
+        </div>
+
+        <div class="tour-container">
+            <!-- PLACEHOLDER FOR YOUR TOUR GUIDE -->
+            <div class="tour-placeholder">
+                🎯 Guide tour virtuel à ajouter ici<br>
+                <small style="display: block; margin-top: 1rem; opacity: 0.7;">
+                    Visite 360°, galerie photos, présentation des espaces (salle principale, terrasse, cuisine)
+                </small>
+            </div>
+            <!-- END PLACEHOLDER -->
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section testimonials">
+        <div class="section-header">
+            <p class="section-subtitle">Témoignages</p>
+            <h2>Ce que nos clients disent</h2>
+            <p>L'avis de ceux qui ont vécu l'expérience</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="rating">★★★★★</div>
+                <p class="testimonial-text">
+                    "Une expérience culinaire absolument exceptionnelle ! Le service est impeccable,
+                    les plats sont sublimes et l'ambiance feutrée. Notre meilleure découverte à Paris."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">IM</div>
+                    <div class="author-info">
+                        <h4>Isabelle Moreau</h4>
+                        <p>Cliente fidèle depuis 5 ans</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="rating">★★★★★</div>
+                <p class="testimonial-text">
+                    "Le Bœuf Rossini est à tomber ! Chaque visite est un enchantement.
+                    L'équipe est aux petits soins et le cadre est magnifique. Un sans-faute."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">PD</div>
+                    <div class="author-info">
+                        <h4>Philippe Dubois</h4>
+                        <p>Critique gastronomique</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="rating">★★★★★</div>
+                <p class="testimonial-text">
+                    "Pour notre anniversaire de mariage, nous avons été traités comme des rois.
+                    Cuisine raffinée, accord mets-vins parfait. Une adresse incontournable !"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">CL</div>
+                    <div class="author-info">
+                        <h4>Claire & Laurent</h4>
+                        <p>Occasion spéciale</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery">
+        <div class="section-header">
+            <p class="section-subtitle">Galerie</p>
+            <h2>Nos Ambiances</h2>
+            <p>Découvrez notre restaurant en images</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">🍽️</div>
+            <div class="gallery-item">🍷</div>
+            <div class="gallery-item">🕯️</div>
+            <div class="gallery-item">👨‍🍳</div>
+            <div class="gallery-item">🥘</div>
+            <div class="gallery-item">🌿</div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="section info">
+        <div class="info-content">
+            <div class="info-box">
+                <h3>📍 Adresse</h3>
+                <p>
+                    15 Rue de la Gastronomie<br>
+                    75008 Paris<br>
+                    France
+                </p>
+                <a href="#">Voir sur Google Maps →</a>
+            </div>
+
+            <div class="info-box">
+                <h3>🕐 Horaires</h3>
+                <p>
+                    <strong>Déjeuner</strong><br>
+                    Mar - Sam : 12h00 - 14h30
+                </p>
+                <p>
+                    <strong>Dîner</strong><br>
+                    Mar - Sam : 19h00 - 22h30
+                </p>
+                <p>Fermé dimanche et lundi</p>
+            </div>
+
+            <div class="info-box">
+                <h3>📞 Contact</h3>
+                <p>
+                    <span class="info-icon">☎️</span>
+                    <a href="tel:+33142334455">01 42 33 44 55</a>
+                </p>
+                <p>
+                    <span class="info-icon">✉️</span>
+                    <a href="mailto:contact@fourchettedor.fr">contact@fourchettedor.fr</a>
+                </p>
+                <div class="social-links" style="justify-content: flex-start;">
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="Facebook">f</a>
+                    <a href="#" aria-label="TripAdvisor">🦉</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 La Fourchette d'Or. Tous droits réservés.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                Restaurant fictif à des fins de démonstration • Template de landing page
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Header shadow on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Menu category switching (basic demo)
+        document.querySelectorAll('.menu-category').forEach(category => {
+            category.addEventListener('click', function() {
+                document.querySelectorAll('.menu-category').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.menu-item, .specialty-card, .testimonial-card, .gallery-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'white';
+                navLinks.style.padding = '2rem';
+                navLinks.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+            }
+        });
+
+        // Console log
+        console.log('%c🍴 La Fourchette d\'Or', 'color: #d4af37; font-size: 20px; font-weight: bold;');
+        console.log('Landing page restaurant prête :');
+        console.log('1. Ajoutez votre formulaire de réservation dans #reservation');
+        console.log('2. Ajoutez votre visite virtuelle dans #tour');
+        console.log('3. Remplacez les emojis par de vraies images');
+        console.log('4. Personnalisez le menu et les contenus');
+    </script>
+
+    <script src="https://voora.vercel.app/sdk/success-loop.js"></script>
+    <script>
+      SuccessLoop.init({
+        organizationId: "da8afe03-ef6d-4c60-996a-d7d0db309a55"
+      })
+    </script>
+</body>
+</html>
