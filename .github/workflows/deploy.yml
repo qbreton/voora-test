@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Permissions nécessaires pour déployer sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Empêche les déploiements concurrents
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (optionnel)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Inject API Key into index.html
+        env:
+          VOORA_API_KEY: ${{ secrets.VOORA_API_KEY }}
+          VOORA_ORG_ID: ${{ secrets.VOORA_ORG_ID }}
+        run: |
+          echo "🔧 Injection de la clé API depuis GitHub Secrets..."
+
+          # Remplace les placeholders dans index.html
+          sed -i "s|VOTRE_CLE_API_ICI|${VOORA_API_KEY}|g" index.html
+          sed -i "s|ORGA_ID|${VOORA_ORG_ID}|g" index.html
+
+          echo "✅ Clé API injectée avec succès"
+          echo "⚠️ La clé n'est jamais affichée dans les logs"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

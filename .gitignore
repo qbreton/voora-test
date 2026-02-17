@@ -1,0 +1,33 @@
+# Fichiers de configuration avec clés API
+.env
+.env.local
+config.local.js
+config.production.js
+
+# Node modules (si vous utilisez npm)
+node_modules/
+package-lock.json
+
+# Fichiers de l'éditeur
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Build artifacts (si vous utilisez un bundler)
+dist/
+build/
+.cache/
+
+# Fichiers temporaires
+*.tmp
+.temp/

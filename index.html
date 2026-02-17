@@ -1064,12 +1064,12 @@
                 <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 2rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
                     Découvrez les différentes sections de notre site et apprenez à naviguer facilement pour réserver votre table.
                 </p>
-                
+
                 <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
                     <button id="btn-start-tour" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
                         🎯 Démarrer la visite guidée
                     </button>
-                    
+
                     <button id="btn-show-tours-list" class="btn-secondary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
                         📋 Voir tous les guides disponibles
                     </button>
@@ -1311,36 +1311,96 @@
         console.log('4. Personnalisez le menu et les contenus');
     </script>
 
+    <!-- Configuration Voora (chargée depuis fichier externe en local) -->
+    <script>
+      // Essayer de charger config.local.js (développement local)
+      // Si ce fichier n'existe pas, les valeurs ci-dessous seront utilisées
+      var script = document.createElement('script');
+      script.src = 'config.local.js';
+      script.onerror = function() {
+        console.log('ℹ️  config.local.js non trouvé - utilisation de la config inline');
+      };
+      document.head.appendChild(script);
+    </script>
+
     <script src="https://voora.vercel.app/sdk/success-loop.js"></script>
     <script>
-      // Initialize SuccessLoop SDK
-      SuccessLoop.init({
-        organizationId: "da8afe03-ef6d-4c60-996a-d7d0db309a55",
-        apiUrl: "https://voora.vercel.app"
-      })
+      // Attendre que config.local.js soit chargé (si disponible)
+      setTimeout(function() {
+        // ===== CONFIGURATION SUCCESSLOOP SDK =====
+        // En développement local : utilisez config.local.js (généré par setup-local.sh/ps1)
+        // En production (GitHub Pages) : les placeholders sont remplacés par GitHub Actions
+
+        const VOORA_CONFIG = window.VOORA_CONFIG || {
+          organizationId: "ORGA_ID",
+          apiKey: "VOTRE_CLE_API_ICI", // ⚠️ Remplacé par GitHub Actions en production
+          apiUrl: "https://voora.vercel.app"
+        }
+
+        // Vérification de la configuration
+        if (VOORA_CONFIG.apiKey === "VOTRE_CLE_API_ICI") {
+          console.error('%c⚠️ ERREUR DE CONFIGURATION', 'color: #ff0000; font-size: 16px; font-weight: bold;')
+          console.error('La clé API (apiKey) n\'est pas configurée.')
+          console.error('')
+          console.error('%cPour le développement local:', 'font-weight: bold;')
+          console.error('1. Exécutez : ./setup-local.sh (Linux/Mac) ou .\\setup-local.ps1 (Windows)')
+          console.error('2. Ou créez manuellement un fichier .env avec vos clés')
+          console.error('')
+          console.error('%cPour GitHub Pages:', 'font-weight: bold;')
+          console.error('1. Allez dans Settings > Secrets and variables > Actions')
+          console.error('2. Ajoutez les secrets : VOORA_API_KEY et VOORA_ORG_ID')
+          console.error('3. Pushez votre code pour déclencher le déploiement')
+          console.error('')
+          console.warn('Le SDK ne fonctionnera pas sans une clé API valide.')
+        } else {
+          console.log('✅ Configuration Voora chargée depuis:', window.VOORA_CONFIG ? 'config.local.js' : 'inline (GitHub Actions)')
+        }
+
+        // Initialize SuccessLoop SDK
+        try {
+          SuccessLoop.init(VOORA_CONFIG)
+          console.log('%c✅ SDK SuccessLoop initialisé', 'color: #4caf50; font-weight: bold;')
+        } catch (error) {
+          console.error('%c❌ Erreur d\'initialisation SDK', 'color: #ff0000; font-weight: bold;', error)
+        }
+
+        initializeSuccessLoop()
+      }, 100) // Petit délai pour laisser config.local.js se charger
+
+      // Fonction d'initialisation principale
+      function initializeSuccessLoop() {
 
       // Identify user (required for tours)
-      SuccessLoop.identify("user_123", {
-        email: "user@example.com",
-        name: "John Doe",
-        plan: "pro"
-      })
+      try {
+        SuccessLoop.identify("user_123", {
+          email: "user@example.com",
+          name: "John Doe",
+          plan: "pro"
+        })
+        console.log('✅ Utilisateur identifié')
+      } catch (error) {
+        console.error('❌ Erreur lors de l\'identification:', error)
+      }
 
-      // Show survey
-      SuccessLoop.showSurvey("f0c3f86d-1cfb-4e07-8359-460454f7904e", '#success-loop-survey')
+      // Show survey (optional - remove if not needed)
+      try {
+        SuccessLoop.showSurvey("f0c3f86d-1cfb-4e07-8359-460454f7904e", '#success-loop-survey')
+      } catch (error) {
+        console.warn('⚠️ Impossible d\'afficher le sondage:', error.message || error)
+      }
 
       // ===== TOUR GUIDE FUNCTIONALITY =====
-      
+
       // Wait for DOM to be ready
       document.addEventListener('DOMContentLoaded', function() {
-        
+
         // Button to start a specific tour (replace with your tour ID)
         const btnStartTour = document.getElementById('btn-start-tour')
         if (btnStartTour) {
           btnStartTour.addEventListener('click', function() {
             // Replace 'YOUR-TOUR-ID-HERE' with your actual tour ID from the dashboard
             const defaultTourId = 'ad302014-f8d3-4619-b361-37b416315ff6' // Example ID
-            
+
             console.log('Starting tour:', defaultTourId)
             SuccessLoop.showTour(defaultTourId)
           })
@@ -1350,26 +1410,26 @@
         const btnShowToursList = document.getElementById('btn-show-tours-list')
         const toursList = document.getElementById('tours-list')
         const toursContainer = document.getElementById('tours-container')
-        
+
         if (btnShowToursList) {
           btnShowToursList.addEventListener('click', function() {
             // Toggle tours list visibility
             if (toursList.style.display === 'none' || toursList.style.display === '') {
               toursList.style.display = 'block'
               btnShowToursList.textContent = '❌ Masquer les guides'
-              
+
               // Fetch and display available tours
               toursContainer.innerHTML = '<p style="color: var(--text-light); font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Chargement des guides...</p>'
-              
+
               SuccessLoop.getTours()
                 .then(function(tours) {
                   console.log('Available tours:', tours)
-                  
+
                   if (tours && tours.length > 0) {
                     let toursHTML = ''
                     tours.forEach(function(tour) {
                       toursHTML += `
-                        <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary); cursor: pointer; transition: all 0.3s;" 
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary); cursor: pointer; transition: all 0.3s;"
                              class="tour-item"
                              data-tour-id="${tour.id}"
                              onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)'"
@@ -1388,7 +1448,7 @@
                       `
                     })
                     toursContainer.innerHTML = toursHTML
-                    
+
                     // Add click handler to tour items
                     document.querySelectorAll('.tour-item').forEach(function(item) {
                       item.addEventListener('click', function() {
@@ -1412,16 +1472,49 @@
                 })
                 .catch(function(error) {
                   console.error('Error fetching tours:', error)
-                  toursContainer.innerHTML = `
-                    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 10px;">
-                      <p style="color: #856404; font-weight: 600; margin-bottom: 0.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-                        ⚠️ Erreur de chargement
-                      </p>
-                      <p style="color: #856404; font-size: 0.95rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-                        Impossible de récupérer les guides. Veuillez réessayer plus tard.
-                      </p>
-                    </div>
-                  `
+
+                  // Détection de l'erreur de clé API
+                  const isApiKeyError = error && (
+                    error.message && error.message.includes('X-API-Key') ||
+                    error.error && error.error.includes('X-API-Key') ||
+                    JSON.stringify(error).includes('X-API-Key')
+                  )
+
+                  if (isApiKeyError) {
+                    toursContainer.innerHTML = `
+                      <div style="background: #ffebee; border: 2px solid #f44336; padding: 2rem; border-radius: 10px;">
+                        <p style="color: #c62828; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          🔑 Clé API manquante ou invalide
+                        </p>
+                        <p style="color: #d32f2f; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          Le SDK SuccessLoop nécessite une clé API valide pour fonctionner.
+                        </p>
+                        <ol style="color: #d32f2f; font-size: 0.9rem; margin-left: 1.5rem; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          <li>Connectez-vous au <strong>dashboard Voora</strong></li>
+                          <li>Allez dans <strong>Paramètres > API Keys</strong></li>
+                          <li>Copiez votre clé API</li>
+                          <li>Remplacez <code style="background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 3px;">VOTRE_CLE_API_ICI</code> dans index.html</li>
+                        </ol>
+                        <p style="color: #666; font-size: 0.85rem; margin-top: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          📍 Dashboard : <a href="https://voora.vercel.app/dashboard" target="_blank" style="color: #1976d2;">https://voora.vercel.app/dashboard</a>
+                        </p>
+                      </div>
+                    `
+                  } else {
+                    toursContainer.innerHTML = `
+                      <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 10px;">
+                        <p style="color: #856404; font-weight: 600; margin-bottom: 0.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          ⚠️ Erreur de chargement
+                        </p>
+                        <p style="color: #856404; font-size: 0.95rem; margin-bottom: 0.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          Impossible de récupérer les guides. Détails : ${error.message || error.error || 'Erreur inconnue'}
+                        </p>
+                        <p style="color: #856404; font-size: 0.85rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          Vérifiez la console pour plus d'informations.
+                        </p>
+                      </div>
+                    `
+                  }
                 })
             } else {
               toursList.style.display = 'none'
@@ -1433,16 +1526,16 @@
         // ===== AUTO-SHOW TOUR ON FIRST VISIT =====
         // Cette fonctionnalité utilise localStorage pour détecter la première visite
         // Pour désactiver : commentez tout le bloc ci-dessous
-        
+
         const TOUR_STORAGE_KEY = 'restaurant-tour-seen'  // Clé localStorage
         const AUTO_TOUR_DELAY = 2000  // Délai en ms avant de lancer le tour (2000 = 2 secondes)
-        
+
         const hasSeenTour = localStorage.getItem(TOUR_STORAGE_KEY)
-        
+
         if (!hasSeenTour) {
           // Première visite détectée
           console.log('🎯 Première visite détectée - Lancement automatique du tour dans ' + (AUTO_TOUR_DELAY/1000) + 's')
-          
+
           setTimeout(function() {
             SuccessLoop.getTours()
               .then(function(tours) {
@@ -1450,10 +1543,10 @@
                   // Lance le premier tour disponible
                   console.log('Lancement du tour:', tours[0].name || tours[0].id)
                   SuccessLoop.showTour(tours[0].id)
-                  
+
                   // Marque comme vu
                   localStorage.setItem(TOUR_STORAGE_KEY, 'true')
-                  
+
                   // Optionnel : enregistrer aussi la date de première visite
                   localStorage.setItem(TOUR_STORAGE_KEY + '-date', new Date().toISOString())
                 } else {
@@ -1461,12 +1554,26 @@
                 }
               })
               .catch(function(error) {
-                console.warn('Impossible de charger le tour automatique:', error)
+                console.error('❌ Impossible de charger le tour automatique:', error)
+
+                // Détection de l'erreur de clé API
+                const isApiKeyError = error && (
+                  error.message && error.message.includes('X-API-Key') ||
+                  error.error && error.error.includes('X-API-Key') ||
+                  JSON.stringify(error).includes('X-API-Key')
+                )
+
+                if (isApiKeyError) {
+                  console.error('%c🔑 ERREUR CLÉ API', 'color: #f44336; font-weight: bold; font-size: 14px;')
+                  console.error('La clé API (apiKey) est manquante ou invalide.')
+                  console.error('Allez dans le dashboard Voora > Paramètres > API Keys')
+                  console.error('Puis modifiez la ligne ~1319 dans index.html')
+                }
               })
           }, AUTO_TOUR_DELAY)
         } else {
           console.log('✅ Tour déjà vu par cet utilisateur')
-          
+
           // Optionnel : afficher quand l'utilisateur a vu le tour la première fois
           const firstVisitDate = localStorage.getItem(TOUR_STORAGE_KEY + '-date')
           if (firstVisitDate) {
@@ -1480,14 +1587,14 @@
           btnResetTour.addEventListener('click', function() {
             localStorage.removeItem('restaurant-tour-seen')
             console.log('🔄 localStorage réinitialisé - Rechargez la page pour tester le tour automatique')
-            
+
             // Show confirmation message
             const originalText = this.textContent
             this.textContent = '✅ Réinitialisé ! Rechargez la page'
             this.style.background = '#4caf50'
             this.style.color = 'white'
             this.style.borderColor = '#4caf50'
-            
+
             setTimeout(() => {
               this.textContent = originalText
               this.style.background = 'transparent'
@@ -1498,22 +1605,23 @@
         }
       })
 
-      // Log SDK readiness
-      console.log('%c🎯 SuccessLoop Tour Guide Ready', 'color: #d4af37; font-size: 16px; font-weight: bold;')
-      console.log('%cFonctionnalités actives:', 'font-weight: bold; color: #2196f3;')
-      console.log('✅ Lancement automatique à la première visite (localStorage)')
-      console.log('✅ Liste des tours disponibles via bouton')
-      console.log('✅ Bouton de réinitialisation pour tester')
-      console.log('')
-      console.log('%cMéthodes SDK disponibles:', 'font-weight: bold; color: #4caf50;')
-      console.log('- SuccessLoop.getTours() - Récupère tous les tours actifs')
-      console.log('- SuccessLoop.showTour(tourId) - Affiche un tour spécifique')
-      console.log('- SuccessLoop.completeTour(tourId) - Marque un tour comme complété')
-      console.log('')
-      console.log('%cLocalStorage:', 'font-weight: bold; color: #ff9800;')
-      console.log('- Clé: restaurant-tour-seen')
-      console.log('- Valeur actuelle:', localStorage.getItem('restaurant-tour-seen') || 'non définie (première visite)')
-      console.log('- Pour réinitialiser: localStorage.removeItem("restaurant-tour-seen")')
+        // Log SDK readiness
+        console.log('%c🎯 SuccessLoop Tour Guide Ready', 'color: #d4af37; font-size: 16px; font-weight: bold;')
+        console.log('%cFonctionnalités actives:', 'font-weight: bold; color: #2196f3;')
+        console.log('✅ Lancement automatique à la première visite (localStorage)')
+        console.log('✅ Liste des tours disponibles via bouton')
+        console.log('✅ Bouton de réinitialisation pour tester')
+        console.log('')
+        console.log('%cMéthodes SDK disponibles:', 'font-weight: bold; color: #4caf50;')
+        console.log('- SuccessLoop.getTours() - Récupère tous les tours actifs')
+        console.log('- SuccessLoop.showTour(tourId) - Affiche un tour spécifique')
+        console.log('- SuccessLoop.completeTour(tourId) - Marque un tour comme complété')
+        console.log('')
+        console.log('%cLocalStorage:', 'font-weight: bold; color: #ff9800;')
+        console.log('- Clé: restaurant-tour-seen')
+        console.log('- Valeur actuelle:', localStorage.getItem('restaurant-tour-seen') || 'non définie (première visite)')
+        console.log('- Pour réinitialiser: localStorage.removeItem("restaurant-tour-seen")')
+      } // Fin de initializeSuccessLoop()
     </script>
 </body>
 </html>
