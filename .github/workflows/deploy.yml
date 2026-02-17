@@ -40,9 +40,11 @@ jobs:
           echo "🔧 Injection de la clé API depuis GitHub Secrets..."
 
           if [ -z "$VOORA_API_KEY" ] || [ -z "$VOORA_ORG_ID" ]; then
-            echo "::error::Secrets manquants. Configurez VOORA_API_KEY et VOORA_ORG_ID dans Settings > Secrets and variables > Actions."
+            echo "::error::Secrets manquants. Vérifiez que VOORA_API_KEY et VOORA_ORG_ID sont bien des *Repository secrets* (Settings > Secrets and variables > Actions), pas des Environment secrets d'un autre environnement."
             exit 1
           fi
+
+          echo "Secrets reçus (longueurs): apiKey=${#VOORA_API_KEY} chars, orgId=${#VOORA_ORG_ID} chars"
 
           # Use Node.js to avoid sed escaping issues with special characters in secrets
           node scripts/inject-config.js
@@ -52,7 +54,7 @@ jobs:
             exit 1
           fi
 
-          echo "✅ Clé API injectée avec succès"
+          echo "✅ Clé API injectée avec succès (build id visible dans les logs ci-dessus)"
           echo "⚠️ La clé n'est jamais affichée dans les logs"
 
       - name: Setup Pages

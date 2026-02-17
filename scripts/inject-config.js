@@ -26,12 +26,19 @@ let html = fs.readFileSync(indexPath, 'utf8');
 html = html.replace(/VOTRE_CLE_API_ICI/g, escapeReplacement(apiKey));
 html = html.replace(/ORGA_ID/g, escapeReplacement(orgId));
 
-// Build id comment so we can verify deployed content in "View Source"
+// Build id for verification in browser console and HTML comment
 const buildId = process.env.GITHUB_RUN_ID || Date.now();
+html = html.replace(/DEPLOY_BUILD_ID/g, String(buildId));
 html = html.replace(
   /(<!-- Configuration Voora \(chargée)/,
   `<!-- build: ${buildId} -->\n    $1`
 );
+
+// Fail if placeholders still present (e.g. wrong file or replace failed)
+if (html.includes('VOTRE_CLE_API_ICI') || html.includes('ORGA_ID')) {
+  console.error('ERROR: Placeholders still present in index.html after replacement');
+  process.exit(1);
+}
 
 fs.writeFileSync(indexPath, html);
 console.log('Injection done. Build id:', buildId);
