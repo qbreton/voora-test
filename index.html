@@ -1340,6 +1340,14 @@
           apiUrl: "https://voora.vercel.app"
         }
 
+        // Debug: vérifier que les valeurs sont injectées (sans les afficher entièrement)
+        console.log('Config debug:', {
+          orgIdLength: VOORA_CONFIG.organizationId.length,
+          apiKeyLength: VOORA_CONFIG.apiKey.length,
+          apiKeyPrefix: VOORA_CONFIG.apiKey.substring(0, 7) + '...',
+          apiUrl: VOORA_CONFIG.apiUrl
+        });
+
         // Vérification de la configuration
         if (VOORA_CONFIG.apiKey === "VOTRE_CLE_API_ICI") {
           console.error('%c⚠️ ERREUR DE CONFIGURATION', 'color: #ff0000; font-size: 16px; font-weight: bold;')
