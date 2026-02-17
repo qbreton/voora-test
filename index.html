@@ -862,6 +862,7 @@
                 <a href="#menu">Menu</a>
                 <a href="#specialties">Spécialités</a>
                 <a href="#testimonials">Avis</a>
+                <a href="#tour" style="color: var(--primary); font-weight: 600;">🎯 Visite guidée</a>
                 <a href="#reservation" class="btn-primary">Réserver</a>
             </div>
             <button class="mobile-menu-toggle">☰</button>
@@ -1059,14 +1060,39 @@
         </div>
 
         <div class="tour-container">
-            <!-- PLACEHOLDER FOR YOUR TOUR GUIDE -->
-            <div class="tour-placeholder">
-                🎯 Guide tour virtuel à ajouter ici<br>
-                <small style="display: block; margin-top: 1rem; opacity: 0.7;">
-                    Visite 360°, galerie photos, présentation des espaces (salle principale, terrasse, cuisine)
-                </small>
+            <div style="text-align: center; padding: 2rem;">
+                <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 2rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                    Découvrez les différentes sections de notre site et apprenez à naviguer facilement pour réserver votre table.
+                </p>
+                
+                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <button id="btn-start-tour" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                        🎯 Démarrer la visite guidée
+                    </button>
+                    
+                    <button id="btn-show-tours-list" class="btn-secondary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                        📋 Voir tous les guides disponibles
+                    </button>
+                </div>
+
+                <div id="tours-list" style="display: none; background: var(--bg-cream); padding: 2rem; border-radius: 15px; margin-top: 2rem; text-align: left;">
+                    <h3 style="color: var(--secondary); margin-bottom: 1rem; font-size: 1.5rem;">Guides disponibles</h3>
+                    <div id="tours-container" style="display: grid; gap: 1rem;">
+                        <p style="color: var(--text-light); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                            Chargement des guides...
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
+                    <p style="font-size: 0.95rem; color: #1565c0; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                        💡 <strong>Astuce :</strong> Le guide tour se lance automatiquement lors de votre première visite !
+                    </p>
+                    <button id="btn-reset-tour" class="btn-secondary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem; border-color: #2196f3; color: #2196f3;">
+                        🔄 Réinitialiser la première visite (pour tester)
+                    </button>
+                </div>
             </div>
-            <!-- END PLACEHOLDER -->
         </div>
     </section>
 
@@ -1287,17 +1313,207 @@
 
     <script src="https://voora.vercel.app/sdk/success-loop.js"></script>
     <script>
+      // Initialize SuccessLoop SDK
       SuccessLoop.init({
-        organizationId: "da8afe03-ef6d-4c60-996a-d7d0db309a55"
+        organizationId: "da8afe03-ef6d-4c60-996a-d7d0db309a55",
+        apiUrl: "https://voora.vercel.app"
       })
 
+      // Identify user (required for tours)
       SuccessLoop.identify("user_123", {
         email: "user@example.com",
         name: "John Doe",
         plan: "pro"
       })
 
+      // Show survey
       SuccessLoop.showSurvey("f0c3f86d-1cfb-4e07-8359-460454f7904e", '#success-loop-survey')
+
+      // ===== TOUR GUIDE FUNCTIONALITY =====
+      
+      // Wait for DOM to be ready
+      document.addEventListener('DOMContentLoaded', function() {
+        
+        // Button to start a specific tour (replace with your tour ID)
+        const btnStartTour = document.getElementById('btn-start-tour')
+        if (btnStartTour) {
+          btnStartTour.addEventListener('click', function() {
+            // Replace 'YOUR-TOUR-ID-HERE' with your actual tour ID from the dashboard
+            const defaultTourId = 'ad302014-f8d3-4619-b361-37b416315ff6' // Example ID
+            
+            console.log('Starting tour:', defaultTourId)
+            SuccessLoop.showTour(defaultTourId)
+          })
+        }
+
+        // Button to show all available tours
+        const btnShowToursList = document.getElementById('btn-show-tours-list')
+        const toursList = document.getElementById('tours-list')
+        const toursContainer = document.getElementById('tours-container')
+        
+        if (btnShowToursList) {
+          btnShowToursList.addEventListener('click', function() {
+            // Toggle tours list visibility
+            if (toursList.style.display === 'none' || toursList.style.display === '') {
+              toursList.style.display = 'block'
+              btnShowToursList.textContent = '❌ Masquer les guides'
+              
+              // Fetch and display available tours
+              toursContainer.innerHTML = '<p style="color: var(--text-light); font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Chargement des guides...</p>'
+              
+              SuccessLoop.getTours()
+                .then(function(tours) {
+                  console.log('Available tours:', tours)
+                  
+                  if (tours && tours.length > 0) {
+                    let toursHTML = ''
+                    tours.forEach(function(tour) {
+                      toursHTML += `
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary); cursor: pointer; transition: all 0.3s;" 
+                             class="tour-item"
+                             data-tour-id="${tour.id}"
+                             onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)'"
+                             onmouseout="this.style.transform='translateX(0)'; this.style.boxShadow='none'">
+                          <h4 style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.2rem;">
+                            ${tour.name || 'Guide sans titre'}
+                          </h4>
+                          <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                            ${tour.description || 'Aucune description disponible'}
+                          </p>
+                          <button class="btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;"
+                                  onclick="event.stopPropagation(); SuccessLoop.showTour('${tour.id}'); console.log('Launching tour: ${tour.id}')">
+                            🎯 Démarrer ce guide
+                          </button>
+                        </div>
+                      `
+                    })
+                    toursContainer.innerHTML = toursHTML
+                    
+                    // Add click handler to tour items
+                    document.querySelectorAll('.tour-item').forEach(function(item) {
+                      item.addEventListener('click', function() {
+                        const tourId = this.getAttribute('data-tour-id')
+                        console.log('Tour item clicked:', tourId)
+                        SuccessLoop.showTour(tourId)
+                      })
+                    })
+                  } else {
+                    toursContainer.innerHTML = `
+                      <div style="text-align: center; padding: 2rem;">
+                        <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          Aucun guide tour n'est actuellement disponible.
+                        </p>
+                        <p style="color: var(--text-light); font-size: 0.95rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                          Créez votre premier guide depuis le dashboard Voora pour commencer.
+                        </p>
+                      </div>
+                    `
+                  }
+                })
+                .catch(function(error) {
+                  console.error('Error fetching tours:', error)
+                  toursContainer.innerHTML = `
+                    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 10px;">
+                      <p style="color: #856404; font-weight: 600; margin-bottom: 0.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                        ⚠️ Erreur de chargement
+                      </p>
+                      <p style="color: #856404; font-size: 0.95rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+                        Impossible de récupérer les guides. Veuillez réessayer plus tard.
+                      </p>
+                    </div>
+                  `
+                })
+            } else {
+              toursList.style.display = 'none'
+              btnShowToursList.textContent = '📋 Voir tous les guides disponibles'
+            }
+          })
+        }
+
+        // ===== AUTO-SHOW TOUR ON FIRST VISIT =====
+        // Cette fonctionnalité utilise localStorage pour détecter la première visite
+        // Pour désactiver : commentez tout le bloc ci-dessous
+        
+        const TOUR_STORAGE_KEY = 'restaurant-tour-seen'  // Clé localStorage
+        const AUTO_TOUR_DELAY = 2000  // Délai en ms avant de lancer le tour (2000 = 2 secondes)
+        
+        const hasSeenTour = localStorage.getItem(TOUR_STORAGE_KEY)
+        
+        if (!hasSeenTour) {
+          // Première visite détectée
+          console.log('🎯 Première visite détectée - Lancement automatique du tour dans ' + (AUTO_TOUR_DELAY/1000) + 's')
+          
+          setTimeout(function() {
+            SuccessLoop.getTours()
+              .then(function(tours) {
+                if (tours && tours.length > 0) {
+                  // Lance le premier tour disponible
+                  console.log('Lancement du tour:', tours[0].name || tours[0].id)
+                  SuccessLoop.showTour(tours[0].id)
+                  
+                  // Marque comme vu
+                  localStorage.setItem(TOUR_STORAGE_KEY, 'true')
+                  
+                  // Optionnel : enregistrer aussi la date de première visite
+                  localStorage.setItem(TOUR_STORAGE_KEY + '-date', new Date().toISOString())
+                } else {
+                  console.warn('Aucun tour disponible pour le lancement automatique')
+                }
+              })
+              .catch(function(error) {
+                console.warn('Impossible de charger le tour automatique:', error)
+              })
+          }, AUTO_TOUR_DELAY)
+        } else {
+          console.log('✅ Tour déjà vu par cet utilisateur')
+          
+          // Optionnel : afficher quand l'utilisateur a vu le tour la première fois
+          const firstVisitDate = localStorage.getItem(TOUR_STORAGE_KEY + '-date')
+          if (firstVisitDate) {
+            console.log('Première visite le:', new Date(firstVisitDate).toLocaleString('fr-FR'))
+          }
+        }
+
+        // Reset button to test first visit behavior
+        const btnResetTour = document.getElementById('btn-reset-tour')
+        if (btnResetTour) {
+          btnResetTour.addEventListener('click', function() {
+            localStorage.removeItem('restaurant-tour-seen')
+            console.log('🔄 localStorage réinitialisé - Rechargez la page pour tester le tour automatique')
+            
+            // Show confirmation message
+            const originalText = this.textContent
+            this.textContent = '✅ Réinitialisé ! Rechargez la page'
+            this.style.background = '#4caf50'
+            this.style.color = 'white'
+            this.style.borderColor = '#4caf50'
+            
+            setTimeout(() => {
+              this.textContent = originalText
+              this.style.background = 'transparent'
+              this.style.color = '#2196f3'
+              this.style.borderColor = '#2196f3'
+            }, 3000)
+          })
+        }
+      })
+
+      // Log SDK readiness
+      console.log('%c🎯 SuccessLoop Tour Guide Ready', 'color: #d4af37; font-size: 16px; font-weight: bold;')
+      console.log('%cFonctionnalités actives:', 'font-weight: bold; color: #2196f3;')
+      console.log('✅ Lancement automatique à la première visite (localStorage)')
+      console.log('✅ Liste des tours disponibles via bouton')
+      console.log('✅ Bouton de réinitialisation pour tester')
+      console.log('')
+      console.log('%cMéthodes SDK disponibles:', 'font-weight: bold; color: #4caf50;')
+      console.log('- SuccessLoop.getTours() - Récupère tous les tours actifs')
+      console.log('- SuccessLoop.showTour(tourId) - Affiche un tour spécifique')
+      console.log('- SuccessLoop.completeTour(tourId) - Marque un tour comme complété')
+      console.log('')
+      console.log('%cLocalStorage:', 'font-weight: bold; color: #ff9800;')
+      console.log('- Clé: restaurant-tour-seen')
+      console.log('- Valeur actuelle:', localStorage.getItem('restaurant-tour-seen') || 'non définie (première visite)')
+      console.log('- Pour réinitialiser: localStorage.removeItem("restaurant-tour-seen")')
     </script>
 </body>
 </html>
