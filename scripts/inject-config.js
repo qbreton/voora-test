@@ -20,11 +20,21 @@ function escapeReplacement(s) {
   return s.replace(/\$/g, '$$');
 }
 
+// Escape for use inside a double-quoted JS string (avoid breaking the HTML)
+function escapeForJsString(s) {
+  return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
 const indexPath = path.join(__dirname, '..', 'index.html');
 let html = fs.readFileSync(indexPath, 'utf8');
 
-html = html.replace(/VOTRE_CLE_API_ICI/g, escapeReplacement(apiKey));
-html = html.replace(/ORGA_ID/g, escapeReplacement(orgId));
+// Replace only the config object values, NOT the check (if VOORA_CONFIG.apiKey === "VOTRE_CLE_API_ICI")
+// so the "not configured" check still works after injection
+const safeApiKey = escapeForJsString(apiKey);
+const safeOrgId = escapeForJsString(orgId);
+html = html.replace(/organizationId: "ORGA_ID"/, 'organizationId: "' + safeOrgId + '"');
+// Only the one in the config object (followed by comma), not the one in if (VOORA_CONFIG.apiKey === "...")
+html = html.replace(/apiKey: "VOTRE_CLE_API_ICI"(?=,)/, 'apiKey: "' + safeApiKey + '"');
 
 // Build id for verification in browser console and HTML comment
 const buildId = process.env.GITHUB_RUN_ID || Date.now();
@@ -34,9 +44,9 @@ html = html.replace(
   `<!-- build: ${buildId} -->\n    $1`
 );
 
-// Fail if placeholders still present (e.g. wrong file or replace failed)
-if (html.includes('VOTRE_CLE_API_ICI') || html.includes('ORGA_ID')) {
-  console.error('ERROR: Placeholders still present in index.html after replacement');
+// Fail if config object still has placeholders (object has comma after apiKey, if() does not)
+if (/organizationId: "ORGA_ID"/.test(html) || /apiKey: "VOTRE_CLE_API_ICI",/.test(html)) {
+  console.error('ERROR: Config placeholders still present in index.html after replacement');
   process.exit(1);
 }
 
