@@ -39,9 +39,21 @@ jobs:
         run: |
           echo "🔧 Injection de la clé API depuis GitHub Secrets..."
 
-          # Remplace les placeholders dans index.html
+          # Fail early if secrets are not configured (required for GitHub Pages)
+          if [ -z "$VOORA_API_KEY" ] || [ -z "$VOORA_ORG_ID" ]; then
+            echo "::error::Secrets manquants. Configurez VOORA_API_KEY et VOORA_ORG_ID dans Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+          # Replace placeholders in index.html
           sed -i "s|VOTRE_CLE_API_ICI|${VOORA_API_KEY}|g" index.html
           sed -i "s|ORGA_ID|${VOORA_ORG_ID}|g" index.html
+
+          # Verify placeholders were replaced (avoid deploying with raw placeholders)
+          if grep -q "VOTRE_CLE_API_ICI\|ORGA_ID" index.html; then
+            echo "::error::Les placeholders n'ont pas été remplacés dans index.html."
+            exit 1
+          fi
 
           echo "✅ Clé API injectée avec succès"
           echo "⚠️ La clé n'est jamais affichée dans les logs"
