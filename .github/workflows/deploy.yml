@@ -49,8 +49,9 @@ jobs:
           # Use Node.js to avoid sed escaping issues with special characters in secrets
           node scripts/inject-config.js
 
-          if grep -q "VOTRE_CLE_API_ICI\|ORGA_ID" index.html; then
-            echo "::error::Les placeholders n'ont pas été remplacés dans index.html."
+          # Only check config object lines (not the if() or doc); script already verifies this
+          if grep -q 'organizationId: "ORGA_ID"' index.html || grep -q 'apiKey: "VOTRE_CLE_API_ICI",' index.html; then
+            echo "::error::Les placeholders n'ont pas été remplacés dans l'objet de config (index.html)."
             exit 1
           fi
 
