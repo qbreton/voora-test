@@ -1402,8 +1402,9 @@
 
       // ===== TOUR GUIDE FUNCTIONALITY =====
 
-      // Wait for DOM to be ready
-      document.addEventListener('DOMContentLoaded', function() {
+      // Setup tours function
+      function setupTours() {
+        console.log('🔧 Setting up tour buttons...')
 
         // Button to start a specific tour (replace with your tour ID)
         const btnStartTour = document.getElementById('btn-start-tour')
@@ -1632,6 +1633,16 @@
         console.log('- Clé: restaurant-tour-seen')
         console.log('- Valeur actuelle:', localStorage.getItem('restaurant-tour-seen') || 'non définie (première visite)')
         console.log('- Pour réinitialiser: localStorage.removeItem("restaurant-tour-seen")')
+      } // Fin de setupTours()
+
+      // Execute setupTours immediately if DOM is ready, or wait for DOMContentLoaded
+      if (document.readyState === 'loading') {
+        console.log('⏳ Waiting for DOM to load...')
+        document.addEventListener('DOMContentLoaded', setupTours)
+      } else {
+        console.log('✅ DOM already loaded, setting up tours immediately')
+        setupTours()
+      }
       } // Fin de initializeSuccessLoop()
     </script>
 </body>
